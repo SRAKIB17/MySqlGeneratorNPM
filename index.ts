@@ -1,25 +1,20 @@
-import genSelectSql from "./SQL/MySQL/@select"
-import genInsertSql from "./SQL/MySQL/@insert"
-import genUpdateSql from "./SQL/MySQL/@update"
-import genDeleteSql from "./SQL/MySQL/@delete"
+import genSelectSql from "./MySQL/@select"
+import genInsertSql from "./MySQL/@insert"
+import genUpdateSql from "./MySQL/@update"
+import genDeleteSql from "./MySQL/@delete"
 
-class SqlGenerator {
-    db: 'mysql'
+class MySqlGeneratorMain {
     genDeleteSql: any
     genSelectSql: any;
     genInsertSql: any;
     genUpdateSql: any;
 
-    constructor({ db }) {
-        this.db = db
-        if (this.db == 'mysql') {
-            this.genSelectSql = genSelectSql
-            this.genInsertSql = genInsertSql;
-            this.genUpdateSql = genUpdateSql;
-            this.genDeleteSql = genDeleteSql
-        }
+    constructor() {
+        this.genSelectSql = genSelectSql
+        this.genInsertSql = genInsertSql;
+        this.genUpdateSql = genUpdateSql;
+        this.genDeleteSql = genDeleteSql
     }
 }
-
-
-export default SqlGenerator
+const MySqlGenerator = new MySqlGeneratorMain()
+export default MySqlGenerator

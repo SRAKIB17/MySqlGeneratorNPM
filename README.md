@@ -13,8 +13,7 @@ This is now development mode
 9. Insert Data
 
 ```js
-import SqlGenerator from 'sqlGenerator';
-const sqlGen = new SqlGenerator({ db: 'mysql' })
+import MySqlGenerator from 'MySqlGenerator';
 ```
 
 ### $between
@@ -223,7 +222,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
 
-const insert = SqlGenerator.genInsertSql({
+const insert = MySqlGenerator.genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test' },
     date_field: 'entry_date',
@@ -238,7 +237,7 @@ without date:
 
 ``` javascript
 
-const insert =SqlGenerator.genInsertSql({
+const insert =MySqlGenerator.genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test', entry_date: new Date()},
 }).getSyntax()
@@ -258,7 +257,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
 
-const test = SqlGenerator.genSelectSql({
+const test = MySqlGenerator.genSelectSql({
     table: 'test',
     specif_field: ['test', 'wow'],
     where: {
@@ -287,7 +286,7 @@ return mysql query. Its call every statement
 | limitSkip(100, 10)      |  limit 100 , skip 10                                                           |
 
 ```js
-const test = SqlGenerator.genSelectSql({
+const test = MySqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -301,7 +300,7 @@ const test = SqlGenerator.genSelectSql({
 count() method use last position
 
 ```js
-const test = SqlGenerator.genSelectSql({
+const test = MySqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -329,7 +328,7 @@ sort() method use last position
 pass an object and multiple filed
 
 ```js
-const test = SqlGenerator.genSelectSql({
+const test = MySqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -369,7 +368,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 const update = {
     name: "Jhon",
 }
-const test = SqlGenerator.genUpdateSql({
+const test = MySqlGenerator.genUpdateSql({
     update_data: update,
     table: "person",
     where: {
@@ -393,7 +392,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 ```js
 
 
-const dl = SqlGenerator.genDeleteSql({
+const dl = MySqlGenerator.genDeleteSql({
     table: 'person',
     where: {
         id: {
