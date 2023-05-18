@@ -1,8 +1,8 @@
 {
   "name": "mysql-query-gen",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "description": " It provides a set of methods or functions that allow you to construct MySQL queries programmatically, making it easier to generate complex queries or customize queries based on specific criteria.",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

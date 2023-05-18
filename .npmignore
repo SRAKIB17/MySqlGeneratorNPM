@@ -4,6 +4,7 @@
 # testing
 /test-directory
 
-*.ts
-**/*.ts
+.env*.local
+*.js
+**/*.js
 package-lock.json
