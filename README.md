@@ -10,10 +10,9 @@ This is now development mode
 6. Condition Parameter
 7. Condition syntax
 8. Insert Data
-9. Insert Data
 
 ```js
-import MySqlGenerator from 'mysql-query-gen';
+npm i mysql-query-gen
 ```
 
 ### $between
@@ -221,8 +220,9 @@ where: {
 note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
+import { genInsertSql} from 'mysql-query-gen'
 
-const insert = MySqlGenerator.genInsertSql({
+const insert = genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test' },
     date_field: 'entry_date',
@@ -237,7 +237,7 @@ without date:
 
 ``` javascript
 
-const insert =MySqlGenerator.genInsertSql({
+const insert =genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test', entry_date: new Date()},
 }).getSyntax()
@@ -256,8 +256,9 @@ console.log(insert)
 note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
+import { genSelectSql} from 'mysql-query-gen'
 
-const test = MySqlGenerator.genSelectSql({
+const test = genSelectSql({
     table: 'test',
     specif_field: ['test', 'wow'],
     where: {
@@ -286,7 +287,7 @@ return mysql query. Its call every statement
 | limitSkip(100, 10)      |  limit 100 , skip 10                                                           |
 
 ```js
-const test = MySqlGenerator.genSelectSql({
+const test = genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -300,7 +301,7 @@ const test = MySqlGenerator.genSelectSql({
 count() method use last position
 
 ```js
-const test = MySqlGenerator.genSelectSql({
+const test = genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -328,7 +329,7 @@ sort() method use last position
 pass an object and multiple filed
 
 ```js
-const test = MySqlGenerator.genSelectSql({
+const test = genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -363,12 +364,12 @@ genSelectSql({
 note:  Should always call the getSyntax function at the end for get syntax
 
 ```js
-
+import { genUpdateSql} from 'mysql-query-gen'
 
 const update = {
     name: "Jhon",
 }
-const test = MySqlGenerator.genUpdateSql({
+const test = genUpdateSql({
     update_data: update,
     table: "person",
     where: {
@@ -390,9 +391,9 @@ const test = MySqlGenerator.genUpdateSql({
 note:  Should always call the getSyntax function at the end for get syntax
 
 ```js
+import { genDeleteSql} from 'mysql-query-gen'
 
-
-const dl = MySqlGenerator.genDeleteSql({
+const dl = genDeleteSql({
     table: 'person',
     where: {
         id: {
