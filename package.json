@@ -1,21 +1,21 @@
 {
   "name": "MySqlGenerator",
   "version": "1.0.0",
-  "description": "",
+  "description": " It provides a set of methods or functions that allow you to construct MySQL queries programmatically, making it easier to generate complex queries or customize queries based on specific criteria.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SRAKIB17/sqlGenerator_npm_package.git"
+    "url": "git+https://github.com/SRAKIB17/MySqlGeneratorNPM.git"
   },
   "author": "SRAKIB17 <rakibulssc5@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SRAKIB17/sqlGenerator_npm_package/issues"
+    "url": "https://github.com/SRAKIB17/MySqlGeneratorNPM/issues"
   },
-  "homepage": "https://github.com/SRAKIB17/sqlGenerator_npm_package#readme",
+  "homepage": "https://github.com/SRAKIB17/MySqlGeneratorNPM#readme",
   "keywords": [
     "database",
     "mysql",
