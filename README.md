@@ -13,7 +13,7 @@ This is now development mode
 9. Insert Data
 
 ```js
-import MySqlGenerator from 'MySqlGenerator';
+import MySqlGenerator from 'mysql-query-gen';
 ```
 
 ### $between
