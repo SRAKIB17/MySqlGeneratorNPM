@@ -1,4 +1,5 @@
-import { conditionInterface, get_final_condition } from "../../lib/condition";
+import { conditionInterface, get_final_condition } from "../lib/condition"
+
 
 function genUpdateSql(props: {
     update_data: {

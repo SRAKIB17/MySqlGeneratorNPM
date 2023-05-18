@@ -1,4 +1,4 @@
-import { conditionInterface, get_final_condition } from "../../lib/condition"
+import { conditionInterface, get_final_condition } from "../lib/condition"
 
 function genSelectSql(props: {
     table: string,
