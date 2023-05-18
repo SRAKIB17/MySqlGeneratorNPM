@@ -8,20 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SRAKIB17/mysql-crud-syntax-package.git"
+    "url": "git+https://github.com/SRAKIB17/sqlGenerator_npm_package.git"
   },
   "author": "SRAKIB17 <rakibulssc5@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SRAKIB17/mysql-crud-syntax-package/issues"
+    "url": "https://github.com/SRAKIB17/sqlGenerator_npm_package/issues"
   },
-  "homepage": "https://github.com/SRAKIB17/mysql-crud-syntax-package#readme",
+  "homepage": "https://github.com/SRAKIB17/sqlGenerator_npm_package#readme",
   "keywords": [
     "database",
     "mysql",
     "sql",
     "crud",
-    "node"
+    "node",
+    "generator"
   ],
   "devDependencies": {
     "typescript": "^5.0.4"

@@ -1,6 +1,6 @@
-import { conditionInterface, get_final_condition } from "../lib/condition";
+import { conditionInterface, get_final_condition } from "../../lib/condition";
 
-function deleteQ(props: {
+function genDeleteSql(props: {
     table: string,
     where: conditionInterface
 }) {
@@ -13,4 +13,4 @@ function deleteQ(props: {
     return { getSyntax }
 }
 
-export default deleteQ;
+export default genDeleteSql;

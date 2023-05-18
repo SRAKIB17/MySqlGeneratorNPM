@@ -223,7 +223,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
 
-const insert = SqlGenerator.insert({
+const insert = SqlGenerator.genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test' },
     date_field: 'entry_date',
@@ -238,7 +238,7 @@ without date:
 
 ``` javascript
 
-const insert =SqlGenerator.insert({
+const insert =SqlGenerator.genInsertSql({
     table: 'test',
     insert_data: { name: 'X', age: 'test', entry_date: new Date()},
 }).getSyntax()
@@ -258,7 +258,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 
 ``` javascript
 
-const test = SqlGenerator.find({
+const test = SqlGenerator.genSelectSql({
     table: 'test',
     specif_field: ['test', 'wow'],
     where: {
@@ -287,7 +287,7 @@ return mysql query. Its call every statement
 | limitSkip(100, 10)      |  limit 100 , skip 10                                                           |
 
 ```js
-const test = SqlGenerator.find({
+const test = SqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -301,7 +301,7 @@ const test = SqlGenerator.find({
 count() method use last position
 
 ```js
-const test = SqlGenerator.find({
+const test = SqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -313,7 +313,7 @@ const test = SqlGenerator.find({
 or:
 
 ```js
-selectQuerySyntax({
+genSelectSql({
     // .....................................
     specif_field: ['count(*) as count']
     // .....................................
@@ -329,7 +329,7 @@ sort() method use last position
 pass an object and multiple filed
 
 ```js
-const test = SqlGenerator.find({
+const test = SqlGenerator.genSelectSql({
     table: 'test',
     where: {
         name: { "!=": "RAKIB" },
@@ -345,7 +345,7 @@ const test = SqlGenerator.find({
 |  SUM(field_name) | If the table contains date name column. Default `false`       |
 
 ```js
-find({
+genSelectSql({
     // .....................................
     specif_field: ['SUM(*) as sum']
     // .....................................
@@ -369,7 +369,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 const update = {
     name: "Jhon",
 }
-const test = SqlGenerator.update({
+const test = SqlGenerator.genUpdateSql({
     update_data: update,
     table: "person",
     where: {
@@ -393,7 +393,7 @@ note:  Should always call the getSyntax function at the end for get syntax
 ```js
 
 
-const dl = SqlGenerator.deleteQ({
+const dl = SqlGenerator.genDeleteSql({
     table: 'person',
     where: {
         id: {

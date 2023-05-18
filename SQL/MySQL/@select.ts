@@ -1,6 +1,6 @@
-import { conditionInterface, get_final_condition } from "../lib/condition"
+import { conditionInterface, get_final_condition } from "../../lib/condition"
 
-function find(props: {
+function genSelectSql(props: {
     table: string,
     specif_field?: string[],
     where?: conditionInterface
@@ -50,6 +50,6 @@ function find(props: {
     return new nextMethod()
 }
 
-export default find
+export default genSelectSql
 
 

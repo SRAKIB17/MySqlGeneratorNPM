@@ -1,6 +1,6 @@
-import { conditionInterface, get_final_condition } from "../lib/condition";
+import { conditionInterface, get_final_condition } from "../../lib/condition";
 
-function update(props: {
+function genUpdateSql(props: {
     update_data: {
         [column_name: string]: string | number | boolean
     },
@@ -26,4 +26,4 @@ function update(props: {
     }
 }
 
-export default update
+export default genUpdateSql

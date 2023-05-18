@@ -1,22 +1,22 @@
-import find from "./@select/index"
-import insert from "./@insert"
-import update from './@update'
-import deleteQ from './@delete'
+import genSelectSql from "./SQL/MySQL/@select"
+import genInsertSql from "./SQL/MySQL/@insert"
+import genUpdateSql from "./SQL/MySQL/@update"
+import genDeleteSql from "./SQL/MySQL/@delete"
 
 class SqlGenerator {
     db: 'mysql'
-    find: any
-    insert: any;
-    update: any;
-    deleteQ: any;
+    genDeleteSql: any
+    genSelectSql: any;
+    genInsertSql: any;
+    genUpdateSql: any;
 
     constructor({ db }) {
         this.db = db
         if (this.db == 'mysql') {
-            this.find = find
-            this.insert = insert;
-            this.update = update;
-            this.deleteQ = deleteQ
+            this.genSelectSql = genSelectSql
+            this.genInsertSql = genInsertSql;
+            this.genUpdateSql = genUpdateSql;
+            this.genDeleteSql = genDeleteSql
         }
     }
 }
