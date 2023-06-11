@@ -17,7 +17,7 @@ This is now development mode
 There will be separate files for each different model.
 model_dir: The folder that will contain the models
 
-`/model`
+`/model`: model extension is `*.model`
 
 ┌ ○ /                                      
 ├ ○ /model/Post.model                                  
