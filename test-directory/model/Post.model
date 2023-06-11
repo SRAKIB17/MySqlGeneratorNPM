@@ -1,0 +1,10 @@
+model Post {
+  id        Int @default (autoincrement(4))
+  title     String @unique
+  content   String
+  published Boolean @default (fsdfdf)
+  author    User @relation(fields: [authorId], references: [id])
+  author    User @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default (now())
+}

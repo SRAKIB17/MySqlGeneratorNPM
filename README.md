@@ -2,14 +2,88 @@
 
 This is now development mode
 
-1. Select Data
-2. Relational Select Data (coming soon)
-3. Insert Data
-4. Update Data
-5. Delete Data
-6. Condition Parameter
-7. Condition syntax
-8. Insert Data
+1. Create Table (new)
+2. Select Data
+3. Relational Select Data (coming soon)
+4. Insert Data
+5. Update Data
+6. Delete Data
+7. Condition Parameter
+8. Condition syntax
+9. Insert Data
+
+# Create Table
+
+There will be separate files for each different model.
+model_dir: The folder that will contain the models
+
+`/model`
+
+┌ ○ /                                      
+├ ○ /model/Post.model                                  
+
+```js
+model Post {
+  id        Int @default (autoincrement(4)) @primary
+  title     String @unique
+  content   String default (null)
+  published Boolean @default (false)
+  author    User @relation(fields: [authorId], references: [id])
+  authorId  Int @not_null
+  createdAt DateTime @default (now())
+}
+
+```
+
+## Syntax
+
+```js
+model model_name {
+  column_name  data_type Constraints
+}
+```
+
+| Properties  | Details                                                        |
+| ----------- | -------------------------------------------------------------- |
+| model_name  | MySql Table Name                                               |
+| column_name | Column Name                                                    |
+| data_type   | Data Type                                                      |
+| Constraints | SQL constraints are used to specify rules for data in a table. |
+
+## date_type
+
+https://www.w3schools.com/MySQL/mysql_datatypes.asp
+
+## Constraints
+
+Use in default (). Like `default (autoincrement(100))
+
+| Default Constraints   | Details                  |
+| --------------------- | ------------------------ |
+| (autoincrement())     | Auto Increment           |
+| (autoincrement(1000)) | Auto Increment from 1000 |
+| (null)                | null                     |
+| (true)                | Boolean True             |
+| (false)               | Boolean False            |
+| (now())               | Current time             |
+
+
+| Constraints                                                           | Details                                                                                   |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| @default (pass constraints)                                           | Example: `@default (autoincrement(4))` .after @default must always be followed by a space |
+| @unique                                                               | For unique column value                                                                   |
+| @primary                                                              | For primary key                                                                           |
+| @not_null                                                             | For not null                                                                              |
+| @relation(fields: [column_name], references: [references_table_name]) | For Foreign key.                                                                          |
+
+
+
+```js
+import { queryGenModel} from 'mysql-query-gen'
+const x = new queryGenModel({ model_dir: 'model' })
+
+```
+
 
 ```js
 npm i mysql-query-gen
@@ -196,26 +270,26 @@ where: {
 
 ## Condition Syntax
 
-| condition syntax       | Description                                                   |
-| ---------------------- | ------------------------------------------------------------- |
-| `=` / `$eq`                   | Equal to                                                      |
-| `>`  /  `$gt`                | Greater than                                                  |
-| `<`   / `$lt`                | Less than                                                     |
-| `>=` /  `$gte`                | Greater than or equal to                                      |
-| `<=`  /  `$lte`               | Less than or equal to                                         |
-| `!=`  /  `$not_eq`               | Not equal to                                                  |
-| `$end`   | Matches a pattern .Finds any values that end with             |
-| `$start` | Matches a pattern .Finds any values that start with           |
-| `$both`  | Matches a pattern .Finds any values that have in any position |
+| condition syntax   | Description                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| `=` / `$eq`        | Equal to                                                      |
+| `>`  /  `$gt`      | Greater than                                                  |
+| `<`   / `$lt`      | Less than                                                     |
+| `>=` /  `$gte`     | Greater than or equal to                                      |
+| `<=`  /  `$lte`    | Less than or equal to                                         |
+| `!=`  /  `$not_eq` | Not equal to                                                  |
+| `$end`             | Matches a pattern .Finds any values that end with             |
+| `$start`           | Matches a pattern .Finds any values that start with           |
+| `$both`            | Matches a pattern .Finds any values that have in any position |
 
 ## Insert
 
-| Insert parameter | Description                                                              |
-| ---------------- | ------------------------------------------------------------------------ |
-| table          | (required)  table name . Example: `db_name.table_name`                               |
-| insert_data     |(required)  Must be an object                                                        |
-| hasDate        |(optional)   If the table contains date name column. Default `false`       |
-| date_field     | (optional)   Date column name. The date will be converted to UTC time zone |
+| Insert parameter | Description                                                                |
+| ---------------- | -------------------------------------------------------------------------- |
+| table            | (required)  table name . Example: `db_name.table_name`                     |
+| insert_data      | (required)  Must be an object                                              |
+| hasDate          | (optional)   If the table contains date name column. Default `false`       |
+| date_field       | (optional)   Date column name. The date will be converted to UTC time zone |
 
 note:  Should always call the getSyntax function at the end for get syntax
 
@@ -247,11 +321,11 @@ console.log(insert)
 
 ## SELECT statement
 
-|  parameter | Description                                                              |
-| ---------------- | ------------------------------------------------------------------------ |
-| table          |(required)   table name . Example: `db_name.table_name`                               |
-| specific_field      |(optional) Must be an array (return specific field)                                                        |
-| where        |(optional) pass multiple or one condition |
+| parameter      | Description                                             |
+| -------------- | ------------------------------------------------------- |
+| table          | (required)   table name . Example: `db_name.table_name` |
+| specific_field | (optional) Must be an array (return specific field)     |
+| where          | (optional) pass multiple or one condition               |
 
 note:  Should always call the getSyntax function at the end for get syntax
 
@@ -281,10 +355,10 @@ return mysql query. Its call every statement
 
 ### limitSkip(): Add limit and skip value
 
-|  parameter | Description                                                              |
-| ---------------- | ------------------------------------------------------------------------ |
-| limitSkip(10)             | limit 10 , skip 0                              |
-| limitSkip(100, 10)      |  limit 100 , skip 10                                                           |
+| parameter          | Description         |
+| ------------------ | ------------------- |
+| limitSkip(10)      | limit 10 , skip 0   |
+| limitSkip(100, 10) | limit 100 , skip 10 |
 
 ```js
 const test = genSelectSql({
@@ -338,11 +412,11 @@ const test = genSelectSql({
 // SELECT * FROM test WHERE name != "RAKIB"  ORDER BY name ASC,age DESC 
 ```
 
-| Method | Description                                                              |
-| ---------------- | ------------------------------------------------------------------------ |
-| MIN(field_name)           | table name . Example: `db_name.table_name`                               |
-| MAX(field_name)    | Must be an object                                                        |
-|  SUM(field_name) | If the table contains date name column. Default `false`       |
+| Method          | Description                                             |
+| --------------- | ------------------------------------------------------- |
+| MIN(field_name) | table name . Example: `db_name.table_name`              |
+| MAX(field_name) | Must be an object                                       |
+| SUM(field_name) | If the table contains date name column. Default `false` |
 
 ```js
 genSelectSql({
@@ -355,11 +429,11 @@ genSelectSql({
 
 ## Update
 
-| update parameter | Description                                |
-| ---------------- | ------------------------------------------ |
-| table         |(required) table name . Example: `db_name.table_name` |
-| update_data          |(required) Must be a  object                 |
-| where           | (required) for and or condition            |
+| update parameter | Description                                           |
+| ---------------- | ----------------------------------------------------- |
+| table            | (required) table name . Example: `db_name.table_name` |
+| update_data      | (required) Must be a  object                          |
+| where            | (required) for and or condition                       |
 
 note:  Should always call the getSyntax function at the end for get syntax
 
@@ -383,10 +457,10 @@ const test = genUpdateSql({
 
 ## DELETE
 
-| delete parameter | Description                                |
-| ---------------- | ------------------------------------------ |
-| table         |(required) table name . Example: `db_name.table_name` |
-| where           | (required) for and or condition            |
+| delete parameter | Description                                           |
+| ---------------- | ----------------------------------------------------- |
+| table            | (required) table name . Example: `db_name.table_name` |
+| where            | (required) for and or condition                       |
 
 note:  Should always call the getSyntax function at the end for get syntax
 
