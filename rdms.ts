@@ -24,21 +24,32 @@ function genRdmsSql(props: {
             return ({
                 getSyntax: this.getSyntax,
                 leftJoin: this.leftJoin,
-                rightJoin: this.rightJoin
+                rightJoin: this.rightJoin,
+                crossJoin: this.crossJoin
             })
         }
         leftJoin() {
             return ({
                 getSyntax: this.getSyntax,
                 innerJoin: this.innerJoin,
-                rightJoin: this.rightJoin
+                rightJoin: this.rightJoin,
+                crossJoin: this.crossJoin
             })
         }
         rightJoin() {
             return ({
                 getSyntax: this.getSyntax,
                 leftJoin: this.leftJoin,
-                innerJoin: this.innerJoin
+                innerJoin: this.innerJoin,
+                crossJoin: this.crossJoin
+            })
+        }
+        crossJoin() {
+            return ({
+                getSyntax: this.getSyntax,
+                leftJoin: this.leftJoin,
+                innerJoin: this.innerJoin,
+                rightJoin: this.rightJoin
             })
         }
     }
