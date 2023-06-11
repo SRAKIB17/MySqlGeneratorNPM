@@ -68,18 +68,14 @@ class queryGenModel {
 
                     const checkPrimaryKey = getColumnDetails.includes('@primary')
                     const checkNotNull = getColumnDetails.includes('@not_null')
-
                     const checkUnique = getColumnDetails.includes('@unique')
-
                     const checkForeignKey = getColumnDetailsSyn.indexOf('@relation(')
-
                     const foreignKeyCheck = checkForeignKey == -1 ? null : getColumnDetailsSyn.slice(checkForeignKey + 10, getColumnDetailsSyn.indexOf(")", checkForeignKey + 10)).split(',')
-
                     const foreignKeyColumn = foreignKeyCheck?.[0]?.split(':')[1].trim().slice(1, -1).split(',')[0]
-
                     const foreignKeyReference = foreignKeyCheck?.[1]?.split(':')[1].trim().slice(1, -1).split(',')[0]
-
-
+                    if (checkPrimaryKey) {
+                        primaryKey = `PRIMARY KEY (${columnName})`
+                    }
 
                     if (foreignKeyCheck) {
                         foreignKey.push(`\tFOREIGN KEY(${columnName}) REFERENCES ${foreignKeyReference}(${foreignKeyColumn})`)
@@ -87,9 +83,12 @@ class queryGenModel {
 
                     if (defaultValue?.auto_increment) auto_increment = defaultValue?.auto_increment;
 
-                    return `\t${columnName} ${dataType}${checkNotNull ? " NOT NULL" : ""}${checkPrimaryKey ? " PRIMARY KEY" : ""}${checkUnique ? " UNIQUE" : ""}${defaultValue ? defaultValue.value : ''}`
+                    return `\t${columnName} ${dataType.toUpperCase()}${checkNotNull ? " NOT NULL" : ""}${checkUnique ? " UNIQUE" : ""}${defaultValue ? defaultValue.value : ''}`
 
                 }).join(',\n')
+                if (primaryKey) {
+                    value += ',\n\t' + primaryKey
+                }
 
                 if (foreignKey) {
                     value += ',\n' + foreignKey.join(',\n')
@@ -97,9 +96,9 @@ class queryGenModel {
 
                 const model_name = open.split("{")[0].split(' ')[1]
                 const table = `
-CREATE TABLE IF NOT EXISTS ${model_name} (
+CREATE TABLE IF NOT EXISTS ${model_name.toLowerCase()} (
 ${value}
-)${auto_increment ? ' AUTO_INCREMENT=' + auto_increment : ''};
+)${auto_increment ? ' AUTO_INCREMENT = ' + auto_increment : ''};
                 `
                 console.log(table)
                 return table
@@ -113,9 +112,11 @@ ${value}
     }
 
 }
-const x = new queryGenModel({ model_dir: 'model' }).model
+// const x = new queryGenModel({ model_dir: 'model' }).model
 
 export default queryGenModel
+
+
 
 
 

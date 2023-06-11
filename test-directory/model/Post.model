@@ -1,5 +1,5 @@
 model Post {
-  id        Int @default (autoincrement(4))
+  id        Int @default (autoincrement(4)) @primary
   title     String @unique
   content   String
   published Boolean @default (fsdfdf)
