@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // tsc select.ts --target es6
-    "target": "ES6",
+    "target": "ES2015",
     "module": "ES2020",
     "moduleResolution": "node",
     "esModuleInterop": true,

@@ -5,6 +5,7 @@
 /test-directory
 
 .env*.local
-*.js
-**/*.js
+*.ts
+**/*.ts
+tsconfig.json
 package-lock.json
