@@ -65,7 +65,7 @@ export default function genRdmsSql(props: {
         let relationTable;
         const getCondition = Object.entries(onCondition).map((rdmsTable) => {
             const aliasesTable = rdmsTable[0]
-            if (!relationTable) relationTable = aliasesTable
+            if (!relationTable) relationTable = table_list[aliasesTable]
 
             const column = rdmsTable[1]
             return `${table_list[aliasesTable]}.${column}`
