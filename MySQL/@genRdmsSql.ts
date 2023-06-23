@@ -79,11 +79,7 @@ export default function genRdmsSql(props: {
     }).join(' AND ')
 
 
-    let sql = `
-SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} 
-${relationWithTable}
-${condition ? " WHERE " + condition + " " : ""}
-    `
+    let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
     let limit_skip: string
 
@@ -102,11 +98,7 @@ ${condition ? " WHERE " + condition + " " : ""}
             }
         }
         count() {
-            sql = `
-SELECT COUNT(*) as count FROM ${table_list.table1} 
-${relationWithTable}
-${condition ? "WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip : ''}
-    `
+            sql = `SELECT COUNT(*) as count FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
@@ -126,11 +118,7 @@ ${condition ? "WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip :
 
                 return `${table_list[field_column]}.${asc[0]} ${(asc[1] == 1 ? "ASC" : "DESC")}`
             }).toString()
-            sql = `
-SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} 
-${relationWithTable}
-${condition ? "WHERE " + condition + " " : ""}${Object.values(field).length ? '  ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}
-    `
+            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${Object.values(field).length ? ' ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}`
             // ORDER BY table1.column_to_sort
             return {
                 getSyntax: this.getSyntax
