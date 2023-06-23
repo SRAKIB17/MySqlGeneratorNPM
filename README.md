@@ -12,6 +12,12 @@ This is now development mode
 8. Condition syntax
 9. Insert Data
 
+
+```js
+npm i mysql-query-gen
+```
+
+
 # Create Table
 
 There will be separate files for each different model.
@@ -53,6 +59,38 @@ model model_name {
 ## date_type
 
 https://www.w3schools.com/MySQL/mysql_datatypes.asp
+
+
+## Constraints
+
+Use in default (). Like `default (autoincrement(100))
+
+| Default Constraints   | Details                  |
+| --------------------- | ------------------------ |
+| (autoincrement())     | Auto Increment           |
+| (autoincrement(1000)) | Auto Increment from 1000 |
+| (null)                | null                     |
+| (true)                | Boolean True             |
+| (false)               | Boolean False            |
+| (now())               | Current time             |
+
+
+| Constraints                                                           | Details                                                                                   |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| @default (pass constraints)                                           | Example: `@default (autoincrement(4))` .after @default must always be followed by a space |
+| @unique                                                               | For unique column value                                                                   |
+| @primary                                                              | For primary key                                                                           |
+| @not_null                                                             | For not null                                                                              |
+| @relation(fields: [column_name], references: [references_table_name]) | For Foreign key.                                                                          |
+
+
+
+```js
+import { queryGenModel} from 'mysql-query-gen'
+const x = new queryGenModel({ model_dir: 'model' })
+
+```
+
 
 ## RDMS(new)
 
@@ -117,40 +155,6 @@ console.log(x)
 
 
 
-## Constraints
-
-Use in default (). Like `default (autoincrement(100))
-
-| Default Constraints   | Details                  |
-| --------------------- | ------------------------ |
-| (autoincrement())     | Auto Increment           |
-| (autoincrement(1000)) | Auto Increment from 1000 |
-| (null)                | null                     |
-| (true)                | Boolean True             |
-| (false)               | Boolean False            |
-| (now())               | Current time             |
-
-
-| Constraints                                                           | Details                                                                                   |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| @default (pass constraints)                                           | Example: `@default (autoincrement(4))` .after @default must always be followed by a space |
-| @unique                                                               | For unique column value                                                                   |
-| @primary                                                              | For primary key                                                                           |
-| @not_null                                                             | For not null                                                                              |
-| @relation(fields: [column_name], references: [references_table_name]) | For Foreign key.                                                                          |
-
-
-
-```js
-import { queryGenModel} from 'mysql-query-gen'
-const x = new queryGenModel({ model_dir: 'model' })
-
-```
-
-
-```js
-npm i mysql-query-gen
-```
 
 ### $between
 
