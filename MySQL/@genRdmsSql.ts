@@ -90,7 +90,7 @@ ${condition ? " WHERE " + condition + " " : ""}
 
     class nextMethod {
         getSyntax() {
-            return sql
+            return sql?.trim()
         }
         limitSkip(limit: number, skip = 0) {
             sql += ` LIMIT ${skip}, ${limit}`;
