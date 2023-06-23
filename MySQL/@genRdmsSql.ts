@@ -80,7 +80,7 @@ export default function genRdmsSql(props: {
 
 
     let sql = `
-SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} as table1
+SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} 
 ${relationWithTable}
 ${condition ? " WHERE " + condition + " " : ""}
     `
@@ -103,7 +103,7 @@ ${condition ? " WHERE " + condition + " " : ""}
         }
         count() {
             sql = `
-SELECT COUNT(*) as count FROM ${table_list.table1} as table1
+SELECT COUNT(*) as count FROM ${table_list.table1} 
 ${relationWithTable}
 ${condition ? "WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip : ''}
     `
@@ -127,7 +127,7 @@ ${condition ? "WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip :
                 return `${table_list[field_column]}.${asc[0]} ${(asc[1] == 1 ? "ASC" : "DESC")}`
             }).toString()
             sql = `
-SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} as table1
+SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} 
 ${relationWithTable}
 ${condition ? "WHERE " + condition + " " : ""}${Object.values(field).length ? '  ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}
     `
