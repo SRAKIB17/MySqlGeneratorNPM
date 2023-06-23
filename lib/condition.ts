@@ -82,7 +82,10 @@ const simpleOperatorCheck = (operator: any) => {
 
 
 
-const only_other_condition = (value: any, pre_field = '', condition = '') => {
+export const only_other_condition = (value: any, pre_field = '', condition = '', rdmsTable = '') => {
+
+    const checkRdmsTable = rdmsTable ? ` ${rdmsTable}.` : ''
+
     const or = Object.keys(value).includes('$or')
     return Object.entries(value).map((c, index, arr) => {
         const field = c[0]
@@ -99,7 +102,7 @@ const only_other_condition = (value: any, pre_field = '', condition = '') => {
                         return include(include_value, method)
                     }
                     else {
-                        return "(" + include_field + (method == 'not' ? " NOT IN " : " IN ") + `(${JSON.stringify(include_value).slice(1, -1)}))`
+                        return "(" + (checkRdmsTable + include_field) + (method == 'not' ? " NOT IN " : " IN ") + `(${JSON.stringify(include_value).slice(1, -1)}))`
                     }
                 }).join(`${"$or" in value ? ' OR ' : " AND "}`)
             }
@@ -111,7 +114,7 @@ const only_other_condition = (value: any, pre_field = '', condition = '') => {
                         return pattern(pattern_value, method)
                     }
                     else {
-                        let matchPattern = `${method == 'not' ? "NOT LIKE" : "LIKE"} ${pattern_field} `
+                        let matchPattern = `${method == 'not' ? "NOT LIKE" : "LIKE"} ${checkRdmsTable + pattern_field} `
                         const check = Object.entries(pattern_value)[0] || ''
 
                         switch (check[0]) {
@@ -141,7 +144,7 @@ const only_other_condition = (value: any, pre_field = '', condition = '') => {
                                 return between(between_value)
                             }
                             else {
-                                return '(' + between_field + ' BETWEEN ' + `${JSON.stringify(between_value.$from)} AND ${JSON.stringify(between_value.$to)})`
+                                return '(' + (checkRdmsTable + between_field) + ' BETWEEN ' + `${JSON.stringify(between_value.$from)} AND ${JSON.stringify(between_value.$to)})`
                             }
                         }).join(`${"$or" in value ? ' OR ' : " AND "}`)
                     }
@@ -175,18 +178,23 @@ const only_other_condition = (value: any, pre_field = '', condition = '') => {
                 }
             }
             else {
+
                 const separator = check_separator.includes(field?.toLowerCase())
-                return `${pre_field ? pre_field : field} ${separator ? simpleOperatorCheck(field) : '='} ${JSON.stringify(value)}`
+
+                return `${pre_field ? (checkRdmsTable + pre_field) : (checkRdmsTable + field)} ${separator ? simpleOperatorCheck(field) : '='} ${JSON.stringify(value)}`
             }
         }
     }).join(`${condition ? condition : (or ? " OR " : " AND ")}`)
 }
 
 
-export const get_final_condition = (value) => {
+export const get_final_condition = (value, rdmsTable = '') => {
     const { $and, $or, ...other_value } = value;
-    let other_value_condition = only_other_condition(other_value)
-    let and_condition = only_other_condition($and || {}, '', " AND ")
-    let or_condition = only_other_condition($or || {}, '', ' OR ')
+    let other_value_condition = only_other_condition(other_value, '', '', rdmsTable)
+
+    let and_condition = only_other_condition($and || {}, '', " AND ", rdmsTable)
+
+    let or_condition = only_other_condition($or || {}, '', ' OR ', rdmsTable)
+
     return `(${other_value_condition}${((other_value_condition && and_condition) ? ') AND (' + and_condition : and_condition) + (((other_value_condition && or_condition) || (and_condition && or_condition)) ? ") OR (" + or_condition : or_condition)})`
 }

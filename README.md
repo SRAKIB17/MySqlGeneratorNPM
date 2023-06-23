@@ -4,7 +4,7 @@ This is now development mode
 
 1. Create Table (new)
 2. Select Data
-3. Relational Select Data (coming soon)
+3. Relational Select Data 
 4. Insert Data
 5. Update Data
 6. Delete Data
@@ -53,6 +53,69 @@ model model_name {
 ## date_type
 
 https://www.w3schools.com/MySQL/mysql_datatypes.asp
+
+## RDMS(new)
+
+```js
+const x = genRdmsSql({
+    table_list: {
+        "table1": 'customer',
+        "table2": "products",
+        'table3': 'test'
+    },
+    specif_field: {
+        // "table1": ['p', 'x'],
+        "table2": ['y', 'sfsdf']
+        // all: ["*"]
+    },
+    relation_key: {
+        'on': {
+            "relation": "INNER JOIN",
+            "table1": 'product_id',//which
+            'table3': 'customer_id', //with
+        },
+        on1: {
+            relation: 'CROSS JOIN',
+            table3: 'test_table3',
+            table2: "test",
+        },
+        on2: {
+            relation: 'CROSS JOIN',
+            table3: 'test_table3',
+            table2: "test",
+        }
+
+    },
+    where: {
+        table1: {
+            "$or": {
+                name: 5345,
+                $between: {
+                    "test": { $from: 35, $to: 534 },
+                },
+                $not_pattern: {
+                    $or: {
+                        country: {
+                            $start: 4534
+                        }
+                    }
+                }
+                // (name = 5345 OR (test BETWEEN 35 AND 534) OR NOT LIKE country "4534%")
+            }
+        }
+    }
+}).limitSkip(10, 10).sort({
+    table1: ['product', 1]
+}).getSyntax()
+console.log(x)
+// SELECT products.y, products.sfsdf FROM customer as table1
+// INNER JOIN ON customer.product_id = test.customer_id
+// CROSS JOIN ON test.test_table3 = products.test
+// WHERE(customer.name = 5345 OR(customer.test BETWEEN 35 AND 534) 
+// OR NOT LIKE  customer.country "4534%")   ORDER BY customer.product ASC   LIMIT 10, 10
+```
+
+
 
 ## Constraints
 
@@ -145,7 +208,7 @@ The IN operator checks if the column_name value matches any of the specified val
         country: ["USA", "US", "INDIA"]
     }
 }
-// ((data IN ("34534",43,4)) OR (test NOT IN ("USA", "US", "INDIA")))
+// ((data IN ("34534",43,4)) OR (country NOT IN ("USA", "US", "INDIA")))
 ```
 
  `$between` , `$include`, `$not_include`, `$pattern`, `$not_pattern` will not pass inside `$include`. `$and` or `$or` can use inside
@@ -157,7 +220,7 @@ The IN operator checks if the column_name value matches any of the specified val
         country: ["USA", "US", "INDIA"]
     }
 }
-// ((data NOT IN ("34534",43,4)) OR (test NOT IN ("USA", "US", "INDIA")))
+// ((data NOT IN ("34534",43,4)) OR (country NOT IN ("USA", "US", "INDIA")))
 
 ```
 
@@ -231,7 +294,7 @@ $not_pattern: {
 
 ```js
 
- "$or": {
+ "$and": {
     name: 5345,
     $between: {
         "test": { $from: 35, $to: 534 },
@@ -410,6 +473,28 @@ const test = genSelectSql({
     }
 }).sort({ name: 1, age: -1 }).getSyntax()
 // SELECT * FROM test WHERE name != "RAKIB"  ORDER BY name ASC,age DESC 
+```
+
+### For RDMS
+
+```js
+onst x = genRdmsSql({
+    //---------------------------------------
+    //---------------------------------------
+    //---------------------------------------
+    //---------------------------------------
+    //---------------------------------------
+}).sort(
+    {
+        table1: ['product', 1]
+    }
+).getSyntax()
+
+//.sort(
+//  {
+//      table1: ['column_name', 1 or 0)]
+//  }
+// ).getSyntax()
 ```
 
 | Method          | Description                                             |
