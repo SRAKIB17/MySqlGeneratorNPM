@@ -8,12 +8,16 @@ export default function genRdmsSql(props: {
         "table2": any,
         "table3"?: any,
         "table4"?: any,
+        "table5"?: any,
+        "table6"?: any,
     },
     specif_field: {
         "table1"?: string[],
         "table2"?: string[],
         "table3"?: string[],
         "table4"?: string[],
+        "table5"?: string[],
+        "table6"?: string[],
     },
     relation_key: {
         "on": {
@@ -22,6 +26,8 @@ export default function genRdmsSql(props: {
             "table2"?: string,
             "table3"?: string,
             "table4"?: string,
+            "table5"?: string,
+            "table6"?: string,
         },
         "on1"?: {
             "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
@@ -29,6 +35,8 @@ export default function genRdmsSql(props: {
             "table2"?: string,
             "table3"?: string,
             "table4"?: string,
+            "table5"?: string,
+            "table6"?: string,
         },
         "on2"?: {
             "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
@@ -36,6 +44,26 @@ export default function genRdmsSql(props: {
             "table2"?: string,
             "table3"?: string,
             "table4"?: string,
+            "table5"?: string,
+            "table6"?: string,
+        },
+        "on4"?: {
+            "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
+            "table1"?: string,
+            "table2"?: string,
+            "table3"?: string,
+            "table4"?: string,
+            "table5"?: string,
+            "table6"?: string,
+        },
+        "on5"?: {
+            "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
+            "table1"?: string,
+            "table2"?: string,
+            "table3"?: string,
+            "table4"?: string,
+            "table5"?: string,
+            "table6"?: string,
         },
     }
     where: {
@@ -43,6 +71,8 @@ export default function genRdmsSql(props: {
         "table2"?: conditionInterface,
         "table3"?: conditionInterface,
         "table4"?: conditionInterface,
+        "table5"?: conditionInterface,
+        "table6"?: conditionInterface,
     }
 }) {
 
