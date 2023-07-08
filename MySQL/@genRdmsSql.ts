@@ -113,7 +113,9 @@ export default function genRdmsSql(props: {
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
-    let limit_skip: string
+    let limit_skip: string;
+    let groupBY: string;
+    let having: string;
 
 
     class nextMethod {
@@ -121,8 +123,9 @@ export default function genRdmsSql(props: {
             return sql?.trim()
         }
         limitSkip(limit: number, skip = 0) {
-            sql += ` LIMIT ${skip}, ${limit}`;
             limit_skip = ` LIMIT ${skip}, ${limit}`;
+            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+
             return {
                 count: this.count,
                 getSyntax: this.getSyntax,
@@ -146,18 +149,34 @@ export default function genRdmsSql(props: {
             const field_column = Object.entries(field).map(f => {
                 const field_column = f[0]
                 const asc = f[1]
-                console.log(asc)
-
                 return `${table_list[field_column]}.${asc[0]} ${(asc[1] == 1 ? "ASC" : "DESC")}`
             }).toString()
-            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${Object.values(field).length ? ' ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}`
-            // ORDER BY table1.column_to_sort
+            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${Object.values(field).length ? ' ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}`
             return {
+                getSyntax: this.getSyntax
+            }
+        }
+        having(having_condition: conditionInterface) {
+            const queryCondition = (get_final_condition(having_condition))
+            having = queryCondition;
+            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}`
+
+            return {
+                sort: this.sort,
+                limitSkip: this.limitSkip,
+                getSyntax: this.getSyntax
+            }
+        }
+        groupBY(column_name: string[]) {
+            groupBY = column_name?.join(',')
+            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}`
+            return {
+                sort: this.sort,
+                limitSkip: this.limitSkip,
+                having: this.having,
                 getSyntax: this.getSyntax
             }
         }
     }
     return new nextMethod()
 }
-
-
