@@ -114,7 +114,7 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                         return pattern(pattern_value, method)
                     }
                     else {
-                        let matchPattern = `${method == 'not' ? "NOT LIKE" : "LIKE"} ${checkRdmsTable + pattern_field} `
+                        let matchPattern = `${checkRdmsTable + pattern_field} ${method == 'not' ? "NOT LIKE" : "LIKE"} `
                         const check = Object.entries(pattern_value)[0] || ''
 
                         switch (check[0]) {
