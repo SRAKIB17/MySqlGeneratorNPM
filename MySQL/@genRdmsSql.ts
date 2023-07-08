@@ -106,9 +106,9 @@ export default function genRdmsSql(props: {
     // jodi contidion pass na kori tahele shudu faka string pass korlei hobe
     const condition = Object.entries(props?.where).map((whr) => {
         const table = whr[0]
-        const condition = whr[1]
+        const condition = whr[1];
         return get_final_condition(condition, table_list[table])
-    }).join(' AND ')
+    }).join(' OR ')
 
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`

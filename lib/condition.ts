@@ -160,10 +160,11 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                     break;
 
                 case '$pattern':
+
                     return pattern(value)?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')
                     break;
                 case '$not_pattern':
-                    return pattern(value, 'not')?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')
+                    return pattern(value, 'not')?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')?.replaceAll(/\( AND/gi, '')
                     break;
 
                 default:
@@ -197,6 +198,6 @@ export const get_final_condition = (value, rdmsTable = '') => {
     let and_condition = only_other_condition($and || {}, '', " AND ", rdmsTable)
 
     let or_condition = only_other_condition($or || {}, '', ' OR ', rdmsTable)
-
-    return `(${other_value_condition}${((other_value_condition && and_condition) ? ') AND (' + and_condition : and_condition) + (((other_value_condition && or_condition) || (and_condition && or_condition)) ? ") OR (" + or_condition : or_condition)})`
+    const final_condition: any = `(${other_value_condition}${((other_value_condition && and_condition) ? ') AND (' + and_condition : and_condition) + (((other_value_condition && or_condition) || (and_condition && or_condition)) ? ") OR (" + or_condition : or_condition)})`
+    return final_condition?.replaceAll(/\( AND /gi, '(')
 }
