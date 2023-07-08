@@ -100,7 +100,6 @@ CREATE TABLE IF NOT EXISTS ${model_name.toLowerCase()} (
 ${value}
 )${auto_increment ? ' AUTO_INCREMENT = ' + auto_increment : ''};
                 `
-                console.log(table)
                 return table
             })
             return getModel
