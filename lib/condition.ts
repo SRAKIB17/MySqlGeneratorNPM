@@ -106,12 +106,13 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                     }
                 }).join(`${"$or" in value ? ' OR ' : " AND "}`)
             }
-            const pattern = (value, method = '') => {
-                return Object.entries(value).map(inc => {
+            const pattern = (value, method = '', operation = "$AND") => {
+
+                return String(Object.entries(value).map((inc, index, arr) => {
                     const pattern_field = inc[0]
                     const pattern_value: any = inc[1]
                     if (pattern_field.toLowerCase() == '$or' || pattern_field.toLowerCase() == '$and') {
-                        return pattern(pattern_value, method)
+                        return pattern(pattern_value, method, pattern_field?.toUpperCase())
                     }
                     else {
                         let matchPattern = `${checkRdmsTable + pattern_field} ${method == 'not' ? "NOT LIKE" : "LIKE"} `
@@ -130,10 +131,11 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                             default:
                                 break;
                         }
-                        return matchPattern
+                        return ((arr.length == 1) ? " " + operation?.slice(1) : '') + matchPattern + (index < arr.length - 1 ? ' ' + operation?.slice(1) : " ")
                     }
-                }).join(`${"$or" in value ? ' OR ' : " AND "}`)
+                }))
             }
+
             switch (field) {
                 case '$between':
                     const between = (value) => {
@@ -158,10 +160,10 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                     break;
 
                 case '$pattern':
-                    return pattern(value)
+                    return pattern(value)?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')
                     break;
                 case '$not_pattern':
-                    return pattern(value, 'not')
+                    return pattern(value, 'not')?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')
                     break;
 
                 default:
