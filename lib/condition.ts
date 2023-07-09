@@ -131,7 +131,7 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                             default:
                                 break;
                         }
-                        return ((arr.length == 1) ? " " + operation?.slice(1) : '') + matchPattern + (index < arr.length - 1 ? ' ' + operation?.slice(1) : " ")
+                        return ((arr.length == 1) ? " " + operation?.slice(1) : ' ') + matchPattern + (index < arr.length - 1 ? ' ' + operation?.slice(1) : " ")
                     }
                 }))
             }
