@@ -133,7 +133,7 @@ export default function genRdmsSql(props: {
             }
         }
         count() {
-            sql = `SELECT COUNT(*) as count FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip : ''}`
+            sql = `SELECT COUNT(${table_list?.table1}.*) as count FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
