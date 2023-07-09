@@ -47,7 +47,7 @@ export default function genRdmsSql(props: {
             "table5"?: string,
             "table6"?: string,
         },
-        "on4"?: {
+        "on3"?: {
             "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
             "table1"?: string,
             "table2"?: string,
@@ -56,7 +56,7 @@ export default function genRdmsSql(props: {
             "table5"?: string,
             "table6"?: string,
         },
-        "on5"?: {
+        "on4"?: {
             "relation": 'JOIN' | 'INNER JOIN' | 'CROSS JOIN' | 'RIGHT JOIN' | 'LEFT JOIN',
             "table1"?: string,
             "table2"?: string,
