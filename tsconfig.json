@@ -10,12 +10,11 @@
     "skipLibCheck": true,
     "outDir": "./test-directory",
     "lib": [
-      "ES2017.Object",
+      "ES2022.Object",
       "DOM",
       "ESNext",
-      "ES2017",
-      "ES2021",
-      "es2021.intl"
+      "ES2022",
+      "ES2022.intl"
     ]
   },
   "include": [

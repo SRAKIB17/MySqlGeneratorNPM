@@ -88,7 +88,6 @@ export default function genRdmsSql(props: {
         return column
     }).flat().join(', ');
 
-
     const relationWithTable = Object.entries(relation_key).map((r_key) => {
         const relationRdms = r_key[1]
         const { relation, ...onCondition } = relationRdms;
@@ -102,21 +101,28 @@ export default function genRdmsSql(props: {
         return `${relation} ${relationTable} ON ${getCondition}`
     }).slice(0, table_length - 1).join('\n')
 
+    // Jodi condition pass na kori tahele shudu faka string pass korlei hobe
+    const condition = String(
+        Object.entries(props?.where).map((whr) => {
+            const table = whr[0]
+            let condition = whr[1];
 
-    // jodi contidion pass na kori tahele shudu faka string pass korlei hobe
-    const condition = Object.entries(props?.where).map((whr) => {
-        const table = whr[0]
-        const condition = whr[1];
-        return get_final_condition(condition, table_list[table])
-    }).join(' OR ')
-
+            const and_or = Object.keys(condition)?.[0];
+            if (and_or?.toLowerCase().includes('$and') || and_or?.toLowerCase()?.includes('$or')) {
+                const values = Object.values(condition)?.[0];
+                return get_final_condition(values, table_list[table]) + " OR "
+            }
+            else {
+                return get_final_condition(condition, table_list[table]) + " AND "
+            }
+        })
+    )?.replaceAll(' AND ,', ' AND ')?.replaceAll(" OR ,", " OR ")?.trim()?.slice(0, -2)?.trim()
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
     let limit_skip: string;
     let groupBY: string;
     let having: string;
-
 
     class nextMethod {
         getSyntax() {
