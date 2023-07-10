@@ -102,7 +102,8 @@ export default function genRdmsSql(props: {
     }).slice(0, table_length - 1).join('\n')
 
     // Jodi condition pass na kori tahele shudu faka string pass korlei hobe
-    const condition = String(
+    let condition = ''
+    const checkConditionByAndOr = String(
         Object.entries(props?.where).map((whr) => {
             const table = whr[0]
             let condition = whr[1];
@@ -116,7 +117,14 @@ export default function genRdmsSql(props: {
                 return get_final_condition(condition, table_list[table]) + " AND "
             }
         })
-    )?.replaceAll(' AND ,', ' AND ')?.replaceAll(" OR ,", " OR ")?.trim()?.slice(0, -2)?.trim()
+    )?.replaceAll(' AND ,', ' AND ')?.replaceAll(" OR ,", " OR ")?.trim();
+
+    if (checkConditionByAndOr?.lastIndexOf("AND") + 3 == checkConditionByAndOr?.length) {
+        condition = checkConditionByAndOr?.slice(0, -3)
+    }
+    else {
+        condition = checkConditionByAndOr?.slice(0, -2)
+    }
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
@@ -163,7 +171,7 @@ export default function genRdmsSql(props: {
             }
         }
         having(having_condition: conditionInterface) {
-            const queryCondition = (get_final_condition(having_condition))
+            const queryCondition = (get_final_condition(having_condition));
             having = queryCondition;
             sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}`
 
@@ -186,3 +194,40 @@ export default function genRdmsSql(props: {
     }
     return new nextMethod()
 }
+
+
+const product_sql = genRdmsSql({
+    table_list: {
+        table1: 'products',
+        table2: "vendor_details",
+        table3: 'product_categories',
+        table4: 'product_reviews'
+    },
+    relation_key: {
+        on: {
+            relation: 'LEFT JOIN',
+            table1: 'vendorID',
+            table2: 'vendorID'
+        },
+        on1: {
+            relation: 'LEFT JOIN',
+            table1: 'categoryID',
+            table3: 'categoryID',
+        },
+        on2: {
+            relation: 'LEFT JOIN',
+            table1: 'productID',
+            table4: 'productID',
+        }
+    },
+    where: {
+        table1: { productID: "productID" }
+    },
+    specif_field: {
+        table1: ['*'],
+        table2: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
+        table3: ['*, SUM(rating) / count(rating) as rating, COUNT(userID) as totalRating'],
+    }
+}).groupBY(['productID']).getSyntax();
+
+// console.log(product_sql)
