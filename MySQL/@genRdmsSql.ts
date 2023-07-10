@@ -111,7 +111,7 @@ export default function genRdmsSql(props: {
             const and_or = Object.keys(condition)?.[0];
             if (and_or?.toLowerCase().includes('$and') || and_or?.toLowerCase()?.includes('$or')) {
                 const values = Object.values(condition)?.[0];
-                return get_final_condition(values, table_list[table]) + " OR "
+                return get_final_condition(values, table_list[table]) + (and_or?.toLowerCase().includes('$and') ? " AND " : " OR ");
             }
             else {
                 return get_final_condition(condition, table_list[table]) + " AND "
@@ -230,4 +230,91 @@ const product_sql = genRdmsSql({
     }
 }).groupBY(['productID']).getSyntax();
 
-// console.log(product_sql)
+const searchProductSql = genRdmsSql({
+    table_list: {
+        table1: 'products',
+        table2: "product_categories",
+        table3: 'product_reviews',
+        table4: 'vendor_details'
+    },
+    relation_key: {
+        on: {
+            relation: 'LEFT JOIN',
+            table1: 'categoryID',
+            table2: 'categoryID'
+        },
+        on1: {
+            table1: 'productID',
+            relation: 'LEFT JOIN',
+            table3: 'productID'
+        },
+        on2: {
+            table1: 'vendorID',
+            relation: 'LEFT JOIN',
+            table4: 'vendorID'
+        }
+    },
+    specif_field: {
+        table1: ['*'],
+        table2: ['*, SUM(rating) / count(rating) as rating, count(userID) as totalReviews'],
+        table4: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
+    },
+    where: {
+        table1: {
+            $and: {
+                $pattern: {
+                    $or: {
+                        title: {
+                            $both: "query"
+                        },
+                        brand: {
+                            $both: "query"
+                        },
+                        description: {
+                            $both: "query"
+                        },
+                        categoryID: {
+                            $both: "query"
+                        },
+                        fullDescription: {
+                            $both: "query"
+                        },
+                        subCategoryID: {
+                            $both: "query"
+                        },
+                        tags: {
+                            $both: "query"
+                        },
+                    }
+                }
+            }
+        },
+        table2: {
+            $or: {
+                $pattern: {
+                    category: {
+                        $both: "query"
+                    },
+                }
+            }
+        },
+        table4: {
+            $or: {
+                $pattern: {
+                    $or: {
+                        shopName: {
+                            $both: "query"
+                        },
+                        userName: {
+                            $both: "query"
+                        },
+                    }
+                }
+            }
+        }
+    },
+
+}).getSyntax()
+
+
+console.log(searchProductSql)
