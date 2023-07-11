@@ -184,7 +184,8 @@ export default function genRdmsSql(props: {
             return {
                 sort: this.sort,
                 limitSkip: this.limitSkip,
-                getSyntax: this.getSyntax
+                getSyntax: this.getSyntax,
+                sum: this.sum
             }
         }
         groupBY(column_name: string[]) {
@@ -194,7 +195,8 @@ export default function genRdmsSql(props: {
                 sort: this.sort,
                 limitSkip: this.limitSkip,
                 having: this.having,
-                getSyntax: this.getSyntax
+                getSyntax: this.getSyntax,
+                sum: this.sum
             }
         }
 
