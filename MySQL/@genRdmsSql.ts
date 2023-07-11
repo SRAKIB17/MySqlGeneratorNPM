@@ -152,6 +152,12 @@ export default function genRdmsSql(props: {
                 getSyntax: this.getSyntax
             }
         }
+        sum(statement: string) {
+            sql = `SELECT sum(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            return {
+                getSyntax: this.getSyntax
+            }
+        }
 
         sort(field: {
             table1?: [string, 0 | 1],
@@ -191,6 +197,7 @@ export default function genRdmsSql(props: {
                 getSyntax: this.getSyntax
             }
         }
+
     }
     return new nextMethod()
 }
