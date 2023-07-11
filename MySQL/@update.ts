@@ -15,7 +15,11 @@ function genUpdateSql(props: {
     const updateInfo = Object.entries(update_data)?.map(info => {
         const column = info[0]
         const value = info[1]
-        return column + '=' + JSON.stringify(value)
+        const slicing = value?.toString()?.split(' ', 2)?.every((r) => {
+            return r?.includes(column) || r?.match(/[+|-|\/|*]/gi)?.length
+        })
+        return column + '=' + ((value?.toString()?.match(/[+|-|\/|*]/gi)?.length && slicing) ? value?.toString() : JSON.stringify(value))
+
     })?.join(',');
 
     const s = `UPDATE ${table} SET ${updateInfo}${queryCondition ? " WHERE " + queryCondition + " " : ""}`;
