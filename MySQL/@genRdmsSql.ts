@@ -143,7 +143,10 @@ export default function genRdmsSql(props: {
             return {
                 count: this.count,
                 getSyntax: this.getSyntax,
-                sort: this.sort
+                sort: this.sort,
+                sum: this.sum,
+                max: this.max,
+                min: this.min
             }
         }
         count() {
@@ -152,8 +155,23 @@ export default function genRdmsSql(props: {
                 getSyntax: this.getSyntax
             }
         }
+
         sum(statement: string) {
             sql = `SELECT sum(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            return {
+                getSyntax: this.getSyntax
+            }
+        }
+
+        max(statement: string) {
+            sql = `SELECT max(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            return {
+                getSyntax: this.getSyntax
+            }
+        }
+
+        min(statement: string) {
+            sql = `SELECT max(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
@@ -185,7 +203,9 @@ export default function genRdmsSql(props: {
                 sort: this.sort,
                 limitSkip: this.limitSkip,
                 getSyntax: this.getSyntax,
-                sum: this.sum
+                sum: this.sum,
+                max: this.max,
+                min: this.min
             }
         }
         groupBY(column_name: string[]) {
@@ -196,7 +216,9 @@ export default function genRdmsSql(props: {
                 limitSkip: this.limitSkip,
                 having: this.having,
                 getSyntax: this.getSyntax,
-                sum: this.sum
+                sum: this.sum,
+                max: this.max,
+                min: this.min
             }
         }
 
