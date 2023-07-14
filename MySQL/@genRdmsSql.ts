@@ -77,7 +77,7 @@ export default function genRdmsSql(props: {
 }) {
 
     const table_list = props.table_list;
-    const table_length = Object.values(table_list).length
+    const table_length = Object.values(table_list)?.length
 
     const relation_key = props.relation_key;
     const specif_field = Object.entries(props?.specif_field).map((sf) => {

@@ -11,9 +11,10 @@ function genSelectSql(props: {
     let limit_skip: string;
     let groupBY: string;
     let having: string;
+    const condition = props?.where
     const queryCondition = (get_final_condition(props?.where))
 
-    let s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""}`;
+    let s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""}`;
 
     class nextMethod {
         getSyntax() {
@@ -21,7 +22,7 @@ function genSelectSql(props: {
         }
         limitSkip(limit: number, skip = 0) {
             limit_skip = ` LIMIT ${skip}, ${limit}`;
-            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`;
+            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`;
             return {
                 count: this.count,
                 getSyntax: this.getSyntax,
@@ -29,7 +30,7 @@ function genSelectSql(props: {
             }
         }
         count() {
-            s = `SELECT COUNT(*) as count FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""}${limit_skip ? " " + limit_skip : ''}`;
+            s = `SELECT COUNT(*) as count FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""}${limit_skip ? " " + limit_skip : ''}`;
 
             return {
                 getSyntax: this.getSyntax
@@ -43,14 +44,14 @@ function genSelectSql(props: {
                 const asc: number = f[1]
                 return `${field_column} ${(asc == 1 ? "ASC" : "DESC")}`
             }).toString()
-            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY + " " : ''} ${having ? ' HAVING ' + having + " " : ''}ORDER BY ${field_column} ${limit_skip ? " " + limit_skip : ''}`;
+            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY + " " : ''} ${having ? ' HAVING ' + having + " " : ''}ORDER BY ${field_column} ${limit_skip ? " " + limit_skip : ''}`;
             return {
                 getSyntax: this.getSyntax
             }
         }
         having(having_condition: conditionInterface) {
             const queryCondition = (get_final_condition(having_condition))
-            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""} GROUP BY ${groupBY} HAVING ${queryCondition}`;
+            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""} GROUP BY ${groupBY} HAVING ${queryCondition}`;
             having = queryCondition;
 
             return {
@@ -61,7 +62,7 @@ function genSelectSql(props: {
         }
         groupBY(column_name: string[]) {
             groupBY = column_name?.join(',')
-            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""} GROUP BY ${groupBY}`;
+            s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${condition ? " WHERE " + queryCondition + " " : ""} GROUP BY ${groupBY}`;
             return {
                 sort: this.sort,
                 limitSkip: this.limitSkip,
@@ -76,5 +77,4 @@ function genSelectSql(props: {
 
 
 export default genSelectSql
-
 

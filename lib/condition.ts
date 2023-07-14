@@ -192,7 +192,7 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
 
 
 export const get_final_condition = (value, rdmsTable = '') => {
-    const { $and, $or, ...other_value } = value;
+    const { $and, $or, ...other_value } = value || {};
     let other_value_condition = only_other_condition(other_value, '', '', rdmsTable)
 
     let and_condition = only_other_condition($and || {}, '', " AND ", rdmsTable)
