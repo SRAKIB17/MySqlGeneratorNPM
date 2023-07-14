@@ -164,14 +164,14 @@ export default function genRdmsSql(props: {
         }
 
         max(statement: string) {
-            sql = `SELECT max(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            sql = `SELECT max(${statement}) as maximum FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
         }
 
         min(statement: string) {
-            sql = `SELECT max(${statement}) as summation FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            sql = `SELECT max(${statement}) as minimum FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""} ${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
