@@ -11,7 +11,7 @@ function genSelectSql(props: {
     let limit_skip: string;
     let groupBY: string;
     let having: string;
-    const queryCondition = (get_final_condition(props.where))
+    const queryCondition = (get_final_condition(props?.where))
 
     let s = `SELECT ${specif_field.length ? specif_field.join(', ') : "*"} FROM ${table}${queryCondition ? " WHERE " + queryCondition + " " : ""}`;
 

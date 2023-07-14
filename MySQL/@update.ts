@@ -10,7 +10,7 @@ function genUpdateSql(props: {
 }) {
     const update_data = props.update_data;
     const table = props.table
-    const queryCondition = (get_final_condition(props.where))
+    const queryCondition = (get_final_condition(props?.where))
 
     const updateInfo = Object.entries(update_data)?.map(info => {
         const column = info[0]
