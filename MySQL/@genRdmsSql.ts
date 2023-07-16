@@ -109,6 +109,7 @@ export default function genRdmsSql(props: {
             let condition = whr[1];
 
             const and_or = Object.keys(condition)?.[0];
+
             if (and_or?.toLowerCase().includes('$and') || and_or?.toLowerCase()?.includes('$or')) {
                 const values = Object.values(condition)?.[0];
                 return get_final_condition(values, table_list[table]) + (and_or?.toLowerCase().includes('$and') ? " AND " : " OR ");
@@ -227,36 +228,89 @@ export default function genRdmsSql(props: {
 }
 
 
-const product_sql = genRdmsSql({
-    table_list: {
-        table1: 'products',
-        table2: "vendor_details",
-        table3: 'product_categories',
-        table4: 'product_reviews'
-    },
-    relation_key: {
-        on: {
-            relation: 'LEFT JOIN',
-            table1: 'vendorID',
-            table2: 'vendorID'
-        },
-        on1: {
-            relation: 'LEFT JOIN',
-            table1: 'categoryID',
-            table3: 'categoryID',
-        },
-        on2: {
-            relation: 'LEFT JOIN',
-            table1: 'productID',
-            table4: 'productID',
-        }
-    },
-    where: {
-        table1: { productID: "productID" }
-    },
-    specif_field: {
-        table1: ['*'],
-        table2: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
-        table3: ['*, SUM(rating) / count(rating) as rating, COUNT(userID) as totalRating'],
-    }
-}).groupBY(['productID']).getSyntax();
+// const product_sql = genRdmsSql({
+//     table_list: {
+//         table1: 'products',
+//         table2: "vendor_details",
+//         table3: 'product_categories',
+//         table4: 'product_reviews'
+//     },
+//     relation_key: {
+//         on: {
+//             relation: 'LEFT JOIN',
+//             table1: 'vendorID',
+//             table2: 'vendorID'
+//         },
+//         on1: {
+//             relation: 'LEFT JOIN',
+//             table1: 'categoryID',
+//             table3: 'categoryID',
+//         },
+//         on2: {
+//             relation: 'LEFT JOIN',
+//             table1: 'productID',
+//             table4: 'productID',
+//         }
+//     },
+//     where: {
+//         table1: { productID: "productID" }
+//     },
+//     specif_field: {
+//         table1: ['*'],
+//         table2: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
+//         table3: ['*, SUM(rating) / count(rating) as rating, COUNT(userID) as totalRating'],
+//     }
+// }).groupBY(['productID']).getSyntax();
+
+
+
+
+// const all_product_sql = genRdmsSql({
+//     table_list: {
+//         table1: 'products',
+//         table2: "product_categories",
+//         table3: 'product_reviews',
+//         table4: 'vendor_details',
+//     },
+//     relation_key: {
+//         on: {
+//             relation: 'LEFT JOIN',
+//             table1: 'categoryID',
+//             table2: 'categoryID'
+//         },
+//         on1: {
+//             table1: 'productID',
+//             relation: 'LEFT JOIN',
+//             table3: 'productID'
+//         },
+//         on2: {
+//             table1: 'vendorID',
+//             relation: 'LEFT JOIN',
+//             table4: 'vendorID'
+//         },
+//     },
+//     specif_field: {
+//         table1: ['*'],
+//         table2: ['*, SUM(rating) / count(rating) as rating, count(userID) as totalReviews'],
+//         table4: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
+//     },
+//     where: {
+//         table4: {
+//             $or: {
+//                 $include: {
+//                     $or: {
+//                         shopName: "shopname",
+//                         userName: 'use_name'
+
+//                     }
+//                     , $and: {
+//                         user53455Name: 'use_name'
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// })
+//     .getSyntax();
+
+// console.log(all_product_sql)

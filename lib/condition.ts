@@ -94,8 +94,8 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
         const special_operator = ['$between', '$include', '$not_include', '$pattern', '$not_pattern']
         if (special_operator.includes(field.toLowerCase())) {
 
-            const include = (value, method = '') => {
-                return Object.entries(value).map(inc => {
+            const include = (value, method = '', operation = ' AND ') => {
+                return `(${Object.entries(value).map(inc => {
                     const include_field = inc[0]
                     const include_value = inc[1]
                     if (include_field.toLowerCase() == '$or' || include_field.toLowerCase() == '$and') {
@@ -104,11 +104,11 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                     else {
                         return "(" + (checkRdmsTable + include_field) + (method == 'not' ? " NOT IN " : " IN ") + `(${JSON.stringify(include_value).slice(1, -1)}))`
                     }
-                }).join(`${"$or" in value ? ' OR ' : " AND "}`)
+                }).join(operation)})`
             }
-            const pattern = (value, method = '', operation = "$AND") => {
+            const pattern = (value, method = '', operation = " AND ") => {
 
-                return String(Object.entries(value).map((inc, index, arr) => {
+                return Object.entries(value).map((inc, index, arr) => {
                     const pattern_field = inc[0]
                     const pattern_value: any = inc[1]
                     if (pattern_field.toLowerCase() == '$or' || pattern_field.toLowerCase() == '$and') {
@@ -131,41 +131,71 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
                             default:
                                 break;
                         }
-                        return ((arr.length == 1) ? " " + operation?.slice(1) : ' ') + matchPattern + (index < arr.length - 1 ? ' ' + operation?.slice(1) : " ")
+                        return `(${matchPattern})`
                     }
-                }))
+                }).join(operation)
             }
 
+            const between = (value, operation = ' AND ') => {
+
+                return Object.entries(value).map(inc => {
+                    const between_field = inc[0]
+                    const between_value: any = inc[1]
+                    if (between_field.toLowerCase() == '$or' || between_field.toLowerCase() == '$and') {
+                        return between(between_value)
+                    }
+                    else {
+                        return '(' + (checkRdmsTable + between_field) + ' BETWEEN ' + `${JSON.stringify(between_value.$from)} AND ${JSON.stringify(between_value.$to)})`
+                    }
+                }).join(operation)
+            }
             switch (field) {
                 case '$between':
-                    const between = (value) => {
-                        return Object.entries(value).map(inc => {
-                            const between_field = inc[0]
-                            const between_value: any = inc[1]
-                            if (between_field.toLowerCase() == '$or' || between_field.toLowerCase() == '$and') {
-                                return between(between_value)
-                            }
-                            else {
-                                return '(' + (checkRdmsTable + between_field) + ' BETWEEN ' + `${JSON.stringify(between_value.$from)} AND ${JSON.stringify(between_value.$to)})`
-                            }
-                        }).join(`${"$or" in value ? ' OR ' : " AND "}`)
-                    }
+                    const { $or: betweenOr, $and: betweenAnd, ...otherBetween } = value;
+
+                    let between_or_condition = betweenOr ? between(betweenOr, " OR ") : ""
+                    let between_and_condition = betweenAnd ? between(betweenAnd, " AND ") : ""
+                    let between_other_condition = Object.values(otherBetween).length ? between(otherBetween, ' AND ') : ''
+
+                    return `${between_or_condition ? between_or_condition : ""}${(between_or_condition && between_and_condition) ? " AND " + between_and_condition : (between_and_condition ? between_and_condition : "")}${(between_and_condition || between_or_condition) && between_other_condition ? " AND " + between_other_condition : (between_other_condition ? between_other_condition : '')}`
+
                     return between(value)
+
                     break;
                 case '$include':
-                    return include(value)
+                    const { $or, $and, ...other } = value;
+
+                    let include_or_condition = $or ? include($or, '', " OR ") : ""
+                    let include_and_condition = $and ? include($and, "", " AND ") : ""
+                    let include_other_condition = Object.values(other).length ? include(other, '', ' AND ') : ''
+
+                    return `${include_or_condition ? include_or_condition : ""}${(include_or_condition && include_and_condition) ? " AND " + include_and_condition : (include_and_condition ? include_and_condition : "")}${(include_and_condition || include_or_condition) && include_other_condition ? " AND " + include_other_condition : (include_other_condition ? include_other_condition : '')}`
                     break;
                 case '$not_include':
-                    return include(value, 'not')
-                    break;
+                    const { $or: notOr, $and: notAnd, ...not_other } = value;
+
+                    let not_or_condition = notOr ? include(notOr, 'not', " OR ") : ""
+                    let not_and_condition = notAnd ? include(notAnd, "not", " AND ") : ""
+                    let not_other_condition = Object.values(not_other).length ? include(not_other, 'not', ' AND ') : ''
+
+                    return `${not_or_condition ? not_or_condition : ""}${(not_or_condition && not_and_condition) ? " AND " + not_and_condition : (not_and_condition ? not_and_condition : "")}${(not_and_condition || not_or_condition) && not_other_condition ? " AND " + not_other_condition : (not_or_condition ? not_other_condition : '')}`
 
                 case '$pattern':
 
-                    return pattern(value)?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')
+                    const { $or: PatOr, $and: PatAnd, ...patOther } = value;
+                    let or_pat_condition = PatOr ? pattern(PatOr, '', " OR ") : ""
+                    let and_pat_condition = PatAnd ? pattern(PatAnd, '', " AND ") : ""
+                    let other_pat_condition = Object.values(patOther).length ? pattern(patOther, '', " AND ") : ""
+
+                    return `${or_pat_condition ? or_pat_condition : ""}${(or_pat_condition && and_pat_condition) ? " AND " + and_pat_condition : (and_pat_condition ? and_pat_condition : "")}${(and_pat_condition || or_pat_condition) && other_pat_condition ? " AND " + other_pat_condition : (other_pat_condition ? other_pat_condition : '')}`
+
                     break;
                 case '$not_pattern':
-                    return pattern(value, 'not')?.replaceAll(/!OR, | !AND, | ,/gi, ' AND')?.replaceAll(/,/gi, '')?.replaceAll(/\( AND/gi, '')
-                    break;
+                    const { $or: notPatOr, $and: notPatAnd, ...notPatOther } = value;
+                    let not_or_pat_condition = notPatOr ? pattern(notPatOr, '', " OR ") : ""
+                    let not_and_pat_condition = notPatAnd ? pattern(notPatAnd, '', " AND ") : ""
+                    let not_other_pat_condition = Object.values(notPatOther).length ? pattern(notPatOther, '', " AND ") : ""
+                    return `${not_or_pat_condition ? not_or_pat_condition : ""}${(not_or_pat_condition && not_and_pat_condition) ? " AND " + not_and_pat_condition : (not_and_pat_condition ? not_and_pat_condition : "")}${(not_and_pat_condition || not_or_pat_condition) && not_other_pat_condition ? " AND " + not_other_pat_condition : (not_other_pat_condition ? not_other_pat_condition : '')}`
 
                 default:
                     break;
@@ -194,7 +224,6 @@ export const only_other_condition = (value: any, pre_field = '', condition = '',
 export const get_final_condition = (value, rdmsTable = '') => {
     const { $and, $or, ...other_value } = value || {};
     let other_value_condition = only_other_condition(other_value, '', '', rdmsTable)
-
     let and_condition = only_other_condition($and || {}, '', " AND ", rdmsTable)
 
     let or_condition = only_other_condition($or || {}, '', ' OR ', rdmsTable)
