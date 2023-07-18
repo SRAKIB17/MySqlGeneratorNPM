@@ -102,6 +102,7 @@ export default function genRdmsSql(props: {
     }).slice(0, table_length - 1).join('\n')
 
     // Jodi condition pass na kori tahele shudu faka string pass korlei hobe
+    let tableOperator
     let condition = Object.entries(props?.where).map((whr) => {
 
         const table = whr[0]
@@ -109,6 +110,7 @@ export default function genRdmsSql(props: {
 
         return Object.entries(condition)?.map((check, index) => {
             const and_or = check?.[0];
+            tableOperator = and_or;
             const againCondition = check?.[1];
 
             if (and_or?.toLowerCase().includes('$and') || and_or?.toLowerCase()?.includes('$or')) {
@@ -118,7 +120,7 @@ export default function genRdmsSql(props: {
                 return `(${get_final_condition({ [and_or]: againCondition }, table_list[table])})`
             }
         }).join(' AND ')
-    }).toString()
+    }).join(tableOperator?.includes('$or') ? ' OR ' : " AND ")
 
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
@@ -222,49 +224,12 @@ export default function genRdmsSql(props: {
 }
 
 
-// const product_sql = genRdmsSql({
-//     table_list: {
-//         table1: 'products',
-//         table2: "vendor_details",
-//         table3: 'product_categories',
-//         table4: 'product_reviews'
-//     },
-//     relation_key: {
-//         on: {
-//             relation: 'LEFT JOIN',
-//             table1: 'vendorID',
-//             table2: 'vendorID'
-//         },
-//         on1: {
-//             relation: 'LEFT JOIN',
-//             table1: 'categoryID',
-//             table3: 'categoryID',
-//         },
-//         on2: {
-//             relation: 'LEFT JOIN',
-//             table1: 'productID',
-//             table4: 'productID',
-//         }
-//     },
-//     where: {
-//         table1: { productID: "productID" }
-//     },
-//     specif_field: {
-//         table1: ['*'],
-//         table2: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
-//         table3: ['*, SUM(rating) / count(rating) as rating, COUNT(userID) as totalRating'],
-//     }
-// }).groupBY(['productID']).getSyntax();
-
-
-
-
-// const all_product_sql = genRdmsSql({
+// const searchProductSql = genRdmsSql({
 //     table_list: {
 //         table1: 'products',
 //         table2: "product_categories",
 //         table3: 'product_reviews',
-//         table4: 'vendor_details',
+//         table4: 'vendor_details'
 //     },
 //     relation_key: {
 //         on: {
@@ -281,7 +246,7 @@ export default function genRdmsSql(props: {
 //             table1: 'vendorID',
 //             relation: 'LEFT JOIN',
 //             table4: 'vendorID'
-//         },
+//         }
 //     },
 //     specif_field: {
 //         table1: ['*'],
@@ -289,21 +254,61 @@ export default function genRdmsSql(props: {
 //         table4: ['vendorID', 'vendorLogo', 'shopName', 'membershipLevel as vendorMembershipLevel', 'userName'],
 //     },
 //     where: {
+//         table1: {
+//             $or: {
+//                 $pattern: {
+//                     $or: {
+//                         title: {
+//                             $both: "query"
+//                         },
+//                         brand: {
+//                             $both: "query"
+//                         },
+//                         description: {
+//                             $both: "query"
+//                         },
+//                         categoryID: {
+//                             $both: "query"
+//                         },
+//                         fullDescription: {
+//                             $both: "query"
+//                         },
+//                         subCategoryID: {
+//                             $both: "query"
+//                         },
+//                         tags: {
+//                             $both: "query"
+//                         },
+//                     }
+//                 }
+//             }
+//         },
+//         table2: {
+//             $or: {
+//                 $pattern: {
+//                     category: {
+//                         $both: "query"
+//                     },
+//                 }
+//             }
+//         },
 //         table4: {
 //             $or: {
-//                 rakib: 34563,
-//                 done: 453,
-//                 $include: {
+//                 $pattern: {
 //                     $or: {
-//                         shopName: [345],
-//                         userName: [34]
+//                         shopName: {
+//                             $both: "query"
+//                         },
+//                         userName: {
+//                             $both: "query"
+//                         },
 //                     }
-//                 },
-//             },
-//             vendorID: "shop"
+//                 }
+//             }
 //         }
-//     }
-// })
-//     .getSyntax();
+//     },
 
-// console.log(all_product_sql)
+// }).getSyntax();
+
+
+// console.log(searchProductSql)
