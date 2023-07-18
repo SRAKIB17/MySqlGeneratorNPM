@@ -102,30 +102,24 @@ export default function genRdmsSql(props: {
     }).slice(0, table_length - 1).join('\n')
 
     // Jodi condition pass na kori tahele shudu faka string pass korlei hobe
-    let condition = ''
-    const checkConditionByAndOr = String(
-        Object.entries(props?.where).map((whr) => {
-            const table = whr[0]
-            let condition = whr[1];
+    let condition = Object.entries(props?.where).map((whr) => {
 
-            const and_or = Object.keys(condition)?.[0];
+        const table = whr[0]
+        let condition = whr[1];
+
+        return Object.entries(condition)?.map((check, index) => {
+            const and_or = check?.[0];
+            const againCondition = check?.[1];
 
             if (and_or?.toLowerCase().includes('$and') || and_or?.toLowerCase()?.includes('$or')) {
-                const values = Object.values(condition)?.[0];
-                return get_final_condition(values, table_list[table]) + (and_or?.toLowerCase().includes('$and') ? " AND " : " OR ");
+                return `(${only_other_condition(againCondition, '', (and_or == '$or' ? ' OR ' : " AND "), table_list[table])})`
             }
             else {
-                return get_final_condition(condition, table_list[table]) + " AND "
+                return `(${get_final_condition({ [and_or]: againCondition }, table_list[table])})`
             }
-        })
-    )?.replaceAll(' AND ,', ' AND ')?.replaceAll(" OR ,", " OR ")?.trim();
+        }).join(' AND ')
+    }).toString()
 
-    if (checkConditionByAndOr?.lastIndexOf("AND") + 3 == checkConditionByAndOr?.length) {
-        condition = checkConditionByAndOr?.slice(0, -3)
-    }
-    else {
-        condition = checkConditionByAndOr?.slice(0, -2)
-    }
 
     let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
@@ -297,17 +291,16 @@ export default function genRdmsSql(props: {
 //     where: {
 //         table4: {
 //             $or: {
+//                 rakib: 34563,
+//                 done: 453,
 //                 $include: {
 //                     $or: {
-//                         shopName: "shopname",
-//                         userName: 'use_name'
-
+//                         shopName: [345],
+//                         userName: [34]
 //                     }
-//                     , $and: {
-//                         user53455Name: 'use_name'
-//                     }
-//                 }
-//             }
+//                 },
+//             },
+//             vendorID: "shop"
 //         }
 //     }
 // })
