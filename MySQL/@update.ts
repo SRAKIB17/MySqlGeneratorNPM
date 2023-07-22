@@ -14,12 +14,11 @@ function genUpdateSql(props: {
 
     const updateInfo = Object.entries(update_data)?.map(info => {
         const column = info[0]
-        const value = info[1]
-        const slicing = value?.toString()?.split(' ', 2)?.every((r) => {
-            return r?.includes(column) || r?.match(/[+|-|\/|*]/gi)?.length
+        const value: any = info[1]
+        const slicing = value?.toString()?.split(' ', 2)?.every((r: any) => {
+            return r?.includes(column) || (r?.match(/[+|-|\/|*]/gi)?.length < 2)
         })
-        return column + '=' + ((value?.toString()?.match(/[+|-|\/|*]/gi)?.length && slicing) ? value?.toString() : JSON.stringify(value))
-
+        return column + '=' + ((value?.toString()?.match(/[+|-|\/|*]/gi)?.length < 2 && slicing) ? value?.toString() : JSON.stringify(value))
     })?.join(',');
 
     const s = `UPDATE ${table} SET ${updateInfo}${queryCondition ? " WHERE " + queryCondition + " " : ""}`;
@@ -30,5 +29,6 @@ function genUpdateSql(props: {
         getSyntax
     }
 }
+
 
 export default genUpdateSql
