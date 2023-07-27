@@ -17,7 +17,7 @@ function genUpdateSql(props: {
 
         const value: any = info?.[1]?.trim();
 
-        const check = value?.indexOf(column) == 0 || value?.lastIndexOf(column) >= (value.length - column?.length);
+        const check = value?.indexOf(column) == 0 || value?.lastIndexOf(column) >= (value?.length - column?.length);
         return (column + '=' + ((value?.match(/[+|-|\/|*]/gi)?.length == 1 && check) ? value?.toString() : JSON.stringify(value)))
     })?.join(',');
 
