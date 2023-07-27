@@ -13,9 +13,9 @@ function genUpdateSql(props: {
     const queryCondition = (get_final_condition(props?.where))
 
     const updateInfo = Object.entries(update_data)?.map((info: any[]) => {
-        const column = info[0];
+        const column = info?.[0];
 
-        const value: any = info[1]?.trim();
+        const value: any = info?.[1]?.trim();
 
         const check = value?.indexOf(column) == 0 || value?.lastIndexOf(column) >= (value.length - column?.length);
         return (column + '=' + ((value?.match(/[+|-|\/|*]/gi)?.length == 1 && check) ? value?.toString() : JSON.stringify(value)))
