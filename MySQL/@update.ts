@@ -14,7 +14,7 @@ function genUpdateSql(props: {
 
     const updateInfo = Object.entries(update_data)?.map((info: any[]) => {
         const column = info?.[0];
-        const isNumber = typeof info?.[1] == 'number';
+        const isNumber = typeof info?.[1] == 'number' || typeof info?.[1] == 'boolean';
         const value: any = isNumber ? info?.[1] : info?.[1]?.trim();
 
         const check = isNumber ? false : value?.indexOf(column) == 0 || value?.lastIndexOf(column) >= (value?.length - column?.length);
