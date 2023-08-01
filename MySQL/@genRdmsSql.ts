@@ -99,7 +99,7 @@ export default function genRdmsSql(props: {
             return `${table_list[aliasesTable]}.${column}`
         }).join(' = ')
         return `${relation} ${relationTable} ON ${getCondition}`
-    }).slice(0, table_length - 1).join('\n')
+    })?.slice(0, table_length - 1)?.join('\n')
 
     // Jodi condition pass na kori tahele shudu faka string pass korlei hobe
     let tableOperator
@@ -119,7 +119,7 @@ export default function genRdmsSql(props: {
             else {
                 return `(${get_final_condition({ [and_or]: againCondition }, table_list[table])})`
             }
-        }).join(' AND ')
+        })?.join(' AND ')
     }).join(tableOperator?.includes('$or') ? ' OR ' : " AND ")
 
 
