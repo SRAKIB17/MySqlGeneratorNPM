@@ -2,12 +2,12 @@ import { conditionInterface, get_final_condition } from "../lib/condition.js"
 
 function genSelectSql(props: {
     table: string,
-    specif_field?: string[],
+    specific_field?: string[],
     where?: conditionInterface
 }) {
 
     const table = props?.table
-    const specif_field = props?.specif_field || []
+    const specif_field = props?.specific_field || []
     let limit_skip: string;
     let groupBY: string;
     let having: string;

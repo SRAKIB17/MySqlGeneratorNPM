@@ -11,7 +11,7 @@ export default function genRdmsSql(props: {
         "table5"?: any,
         "table6"?: any,
     },
-    specif_field: {
+    specific_field: {
         "table1"?: string[],
         "table2"?: string[],
         "table3"?: string[],
@@ -80,7 +80,7 @@ export default function genRdmsSql(props: {
     const table_length = Object.values(table_list)?.length
 
     const relation_key = props.relation_key;
-    const specif_field = Object.entries(props?.specif_field).map((sf) => {
+    const specif_field = Object.entries(props?.specific_field).map((sf) => {
         const table = sf?.[0]
         const column = sf?.[1]?.map(clm => {
             return `${table_list[table]}.${clm}`
@@ -123,7 +123,7 @@ export default function genRdmsSql(props: {
     }).join(tableOperator?.includes('$or') ? ' OR ' : " AND ")
 
 
-    let sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
+    let sql = `SELECT ${(!Object.keys(props.specific_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}`
 
     let limit_skip: string;
     let groupBY: string;
@@ -135,7 +135,7 @@ export default function genRdmsSql(props: {
         }
         limitSkip(limit: number, skip = 0) {
             limit_skip = ` LIMIT ${skip}, ${limit}`;
-            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
+            sql = `SELECT ${(!Object.keys(props.specific_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${limit_skip ? " " + limit_skip : ''}`
 
             return {
                 count: this.count,
@@ -186,7 +186,7 @@ export default function genRdmsSql(props: {
                 const asc = f[1]
                 return `${table_list[field_column]}.${asc[0]} ${(asc[1] == 1 ? "ASC" : "DESC")}`
             }).toString()
-            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${Object.values(field).length ? ' ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}`
+            sql = `SELECT ${(!Object.keys(props.specific_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}${Object.values(field).length ? ' ORDER BY ' + field_column : ''} ${limit_skip ? " " + limit_skip : ''}`
             return {
                 getSyntax: this.getSyntax
             }
@@ -194,7 +194,7 @@ export default function genRdmsSql(props: {
         having(having_condition: conditionInterface) {
             const queryCondition = (get_final_condition(having_condition));
             having = queryCondition;
-            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}`
+            sql = `SELECT ${(!Object.keys(props.specific_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}${having ? ' HAVING ' + having + " " : ''}`
 
             return {
                 sort: this.sort,
@@ -207,7 +207,7 @@ export default function genRdmsSql(props: {
         }
         groupBY(column_name: string[]) {
             groupBY = column_name?.join(',')
-            sql = `SELECT ${(!Object.keys(props.specif_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}`
+            sql = `SELECT ${(!Object.keys(props.specific_field).length) ? "*" : specif_field} FROM ${table_list.table1} ${relationWithTable}${condition ? " WHERE " + condition + " " : ""}${groupBY ? ' GROUP BY ' + groupBY : ''}`
             return {
                 sort: this.sort,
                 limitSkip: this.limitSkip,
