@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SRAKIB17/MySqlGeneratorNPM.git"
+    "url": "git+https://github.com/SRAKIB17/mysql-query-geniex.git"
   },
-  "author": "SRAKIB17 <rakibulssc5@gmail.com>",
+  "author": "SRAKIB17",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SRAKIB17/MySqlGeneratorNPM/issues"
+    "url": "https://github.com/SRAKIB17/mysql-query-geniex/issues"
   },
-  "homepage": "https://github.com/SRAKIB17/MySqlGeneratorNPM#readme",
+  "homepage": "https://github.com/SRAKIB17/mysql-query-geniex#readme",
   "keywords": [
     "database",
     "mysql",
